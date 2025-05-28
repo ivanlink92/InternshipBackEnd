@@ -1,0 +1,6 @@
+@PeerMarking_HostAddress = http://localhost:5298
+
+GET {{PeerMarking_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
