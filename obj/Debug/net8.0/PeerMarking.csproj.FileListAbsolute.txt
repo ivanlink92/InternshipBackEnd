@@ -178,4 +178,10 @@ D:\Project\Internship\Project\PeerMarking\PeerMarking\bin\Debug\net8.0\PeerMarki
 D:\Project\Internship\Project\PeerMarking\PeerMarking\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.UI.dll
 D:\Project\Internship\Project\PeerMarking\PeerMarking\bin\Debug\net8.0\Microsoft.Extensions.FileProviders.Embedded.dll
 D:\Project\Internship\Project\PeerMarking\PeerMarking\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Project\Internship\Project\PeerMarking\PeerMarking\obj\Debug\net8.0\PeerMarking.sourcelink.json
+D:\Project\Internship\Project\PeerMarking\PeerMarking\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+D:\Project\Internship\Project\PeerMarking\PeerMarking\bin\Debug\net8.0\MailKit.dll
+D:\Project\Internship\Project\PeerMarking\PeerMarking\bin\Debug\net8.0\MimeKit.dll
+D:\Project\Internship\Project\PeerMarking\PeerMarking\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
+D:\Project\Internship\Project\PeerMarking\PeerMarking\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 D:\Project\Internship\Project\PeerMarking\PeerMarking\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

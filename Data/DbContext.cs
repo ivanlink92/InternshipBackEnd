@@ -13,6 +13,9 @@ namespace PeerMarking.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<CourseEnrollment> CourseEnrollments { get; set; }
+
+        public DbSet<Presentation> Presentations { get; set; }
+        public DbSet<PresentationSlot> PresentationSlots { get; set; }
     }
 
 }

@@ -303,6 +303,54 @@ namespace PeerMarking.Migrations
                     b.ToTable("Lecturers");
                 });
 
+            modelBuilder.Entity("PeerMarking.Models.Presentation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DurationMin")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PresentationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Presentations");
+                });
+
+            modelBuilder.Entity("PeerMarking.Models.PresentationSlot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PresentationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SlotDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PresentationSlots");
+                });
+
             modelBuilder.Entity("PeerMarking.Models.Student", b =>
                 {
                     b.Property<int>("Id")
