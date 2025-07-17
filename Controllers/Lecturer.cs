@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PeerMarking.Data;
 using PeerMarking.Models;
+using PeerMarking.Services;
 
 namespace PeerMarking.Controllers
 {
@@ -20,12 +22,16 @@ namespace PeerMarking.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
 
 
-        public LecturersController(UniversityDbContext context, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        private readonly EmailService _emailService;
+
+        public LecturersController(UniversityDbContext context, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, EmailService emailService)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailService = emailService;
         }
+
 
         // GET: api/Lecturers
         [HttpGet]
@@ -51,8 +57,12 @@ namespace PeerMarking.Controllers
 
         // POST: api/Lecturers
         [HttpPost]
+        [HttpPost]
         public async Task<ActionResult<Lecturer>> PostLecturer(Lecturer lecturer)
         {
+            // Generate a random password
+            lecturer.Password = GenerateRandomPassword();
+
             var user = new IdentityUser
             {
                 UserName = lecturer.Username,
@@ -61,9 +71,25 @@ namespace PeerMarking.Controllers
             };
 
             var result = await _userManager.CreateAsync(user, lecturer.Password);
-            lecturer.Password = "";
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
             _context.Lecturers.Add(lecturer);
             await _context.SaveChangesAsync();
+
+            try
+            {
+                var subject = "Your Lecturer Account Details";
+                var body = $"Hi {lecturer.FullName},\n\nYour account has been created.\n\nUsername: {lecturer.Username}\nPassword: {lecturer.Password}\n\nPlease log in and change your password immediately.";
+                await _emailService.SendEmailAsync(lecturer.Email, subject, body);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Lecturer created, but failed to send email: {ex.Message}");
+            }
 
             return CreatedAtAction(nameof(GetLecturer), new { id = lecturer.Id }, lecturer);
         }
@@ -172,5 +198,31 @@ namespace PeerMarking.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             return Ok(new { userId });
         }
+
+
+
+        private const string LettersAndNumbers = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        public static string GenerateRandomPassword(int length = 20)
+        {
+            if (length < 1)
+                throw new ArgumentException("Password length must be greater than zero.");
+
+            var password = new StringBuilder();
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                byte[] buffer = new byte[sizeof(uint)];
+
+                for (int i = 0; i < length; i++)
+                {
+                    rng.GetBytes(buffer);
+                    uint num = BitConverter.ToUInt32(buffer, 0);
+                    char randomChar = LettersAndNumbers[(int)(num % LettersAndNumbers.Length)];
+                    password.Append(randomChar);
+                }
+            }
+
+            return password.ToString();
+        }
+
     }
 }

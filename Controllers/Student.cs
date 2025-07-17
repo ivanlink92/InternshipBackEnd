@@ -38,11 +38,20 @@ namespace PeerMarking.Controllers
         [HttpPost]
         public async Task<ActionResult<Student>> PostStudent(Student student)
         {
+            var existingStudent = await _context.Students
+                .FirstOrDefaultAsync(s => s.StudentId == student.StudentId);
+
+            if (existingStudent != null)
+            {
+                return Conflict(new { message = "StudentId already exists." });
+            }
+
             _context.Students.Add(student);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetStudent), new { id = student.Id }, student);
         }
+
 
         // PUT: api/Students/5
         [HttpPut("{id}")]
