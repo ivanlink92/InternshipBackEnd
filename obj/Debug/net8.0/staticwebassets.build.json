@@ -1,12 +1,20 @@
 {
   "Version": 1,
-  "Hash": "qhInHFKR0ZKnUAgFMmp3WLwQaCdHJEK+EQHm2BATF9g=",
+  "Hash": "/K99Boxen5ULeIUNEpqHOUoyazq1ipueXk0WW8RMHyA=",
   "Source": "PeerMarking",
   "BasePath": "_content/PeerMarking",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "PeerMarking\\wwwroot",
+      "Source": "PeerMarking",
+      "ContentRoot": "D:\\Project\\Internship\\Project\\PeerMarking\\PeerMarking\\wwwroot\\",
+      "BasePath": "_content/PeerMarking",
+      "Pattern": "**"
+    }
+  ],
   "Assets": [
     {
       "Identity": "C:\\Users\\ivan_\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\8.0.15\\staticwebassets\\V5\\css\\site.css",
@@ -1267,6 +1275,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\ivan_\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\8.0.15\\staticwebassets\\V5\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "D:\\Project\\Internship\\Project\\PeerMarking\\PeerMarking\\wwwroot\\uploads\\test.csv",
+      "SourceId": "PeerMarking",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Project\\Internship\\Project\\PeerMarking\\PeerMarking\\wwwroot\\",
+      "BasePath": "_content/PeerMarking",
+      "RelativePath": "uploads/test#[.{fingerprint}]?.csv",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "ai8qdj1wjf",
+      "Integrity": "bumv7/W1Vi+g3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\test.csv"
     }
   ],
   "Endpoints": [
@@ -3487,6 +3516,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-16aFlqtpsG9RyieKZUUUjkJpqTgcJtWXwT312I4Iz1s="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/test.ai8qdj1wjf.csv",
+      "AssetFile": "D:\\Project\\Internship\\Project\\PeerMarking\\PeerMarking\\wwwroot\\uploads\\test.csv",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "91"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/csv"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bumv7/W1Vi+g3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Jul 2025 11:38:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ai8qdj1wjf"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/test.csv"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-bumv7/W1Vi+g3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/test.csv",
+      "AssetFile": "D:\\Project\\Internship\\Project\\PeerMarking\\PeerMarking\\wwwroot\\uploads\\test.csv",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "91"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/csv"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bumv7/W1Vi+g3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Jul 2025 11:38:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-bumv7/W1Vi+g3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM="
         }
       ]
     }

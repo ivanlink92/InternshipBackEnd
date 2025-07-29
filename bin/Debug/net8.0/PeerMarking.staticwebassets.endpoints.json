@@ -2221,6 +2221,88 @@
           "Value": "sha256-OZVI+w57FGwS9boYCZpH1ZSpcP7pYhLu4KtIUvPlZ4I="
         }
       ]
+    },
+    {
+      "Route": "uploads/test.ai8qdj1wjf.csv",
+      "AssetFile": "uploads/test.csv",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "91"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/csv"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bumv7/W1Vi+g3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Jul 2025 11:38:07 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ai8qdj1wjf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-bumv7/W1Vi+g3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM="
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/test.csv"
+        }
+      ]
+    },
+    {
+      "Route": "uploads/test.csv",
+      "AssetFile": "uploads/test.csv",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "91"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/csv"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bumv7/W1Vi+g3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Jul 2025 11:38:07 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-bumv7/W1Vi+g3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM="
+        }
+      ]
     }
   ]
 }

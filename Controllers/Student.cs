@@ -95,5 +95,50 @@ namespace PeerMarking.Controllers
         {
             return _context.Students.Any(e => e.Id == id);
         }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadCsv(IFormFile csvFile)
+        {
+            if (csvFile == null || csvFile.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            using var reader = new StreamReader(csvFile.OpenReadStream());
+            var content = await reader.ReadToEndAsync();
+
+            var lines = content.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            var students = new List<Student>();
+
+            foreach (var line in lines.Skip(1)) // Skip CSV header
+            {
+                var columns = line.Split(',');
+
+                if (columns.Length < 3)
+                    continue;
+
+                var studentId = columns[0].Trim();
+                var fullName = columns[1].Trim();
+                var email = columns[2].Trim();
+
+                if (string.IsNullOrWhiteSpace(studentId) || string.IsNullOrWhiteSpace(fullName) || string.IsNullOrWhiteSpace(email))
+                    continue;
+
+                students.Add(new Student
+                {
+                    StudentId = studentId,
+                    FullName = fullName,
+                    Email = email
+                });
+            }
+            // Logging connection string being used
+            Console.WriteLine(_context.Database.GetConnectionString());
+
+
+            _context.Students.AddRange(students);
+            await _context.SaveChangesAsync();
+
+            return Ok("Students uploaded successfully.");
+        }
     }
 }

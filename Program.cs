@@ -12,7 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add DbContext
 builder.Services.AddDbContext<UniversityDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://127.0.0.1:5500") // your frontend origin
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 // Add Controllers
 
 
@@ -60,6 +69,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(); // Show Swagger UI
 }
 
+app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

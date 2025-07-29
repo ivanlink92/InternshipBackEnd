@@ -683,5 +683,37 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PeerMarking.Controllers.StudentsController",
+    "Method": "UploadCsv",
+    "RelativePath": "api/Students/upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "csvFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "YourNamespace.Controllers.UploadController",
+    "Method": "UploadCsv",
+    "RelativePath": "upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "csvFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

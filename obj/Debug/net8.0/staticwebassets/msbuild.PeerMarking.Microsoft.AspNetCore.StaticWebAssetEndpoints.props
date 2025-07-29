@@ -1,0 +1,16 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/PeerMarking/uploads/test.ai8qdj1wjf.csv">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\test.csv'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ai8qdj1wjf"},{"Name":"integrity","Value":"sha256-bumv7/W1Vi\u002Bg3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM="},{"Name":"label","Value":"_content/PeerMarking/uploads/test.csv"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"91"},{"Name":"Content-Type","Value":"text/csv"},{"Name":"ETag","Value":"\u0022bumv7/W1Vi\u002Bg3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM=\u0022"},{"Name":"Last-Modified","Value":"Thu, 24 Jul 2025 11:38:07 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/PeerMarking/uploads/test.csv">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\test.csv'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-bumv7/W1Vi\u002Bg3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"91"},{"Name":"Content-Type","Value":"text/csv"},{"Name":"ETag","Value":"\u0022bumv7/W1Vi\u002Bg3WKH9X3Iizpo6PpMyJy6AOvYXwSb3XM=\u0022"},{"Name":"Last-Modified","Value":"Thu, 24 Jul 2025 11:38:07 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+  </ItemGroup>
+</Project>
