@@ -2,42 +2,37 @@
 using MailKit.Security;
 using MimeKit;
 using Microsoft.Extensions.Configuration;
+using System.Net.Mail;
+using System.Net;
 
 namespace PeerMarking.Services
 {
     public class EmailService
     {
-        private readonly IConfiguration _config;
+        private readonly IConfiguration _configuration;
 
-        public EmailService(IConfiguration config)
+        public EmailService(IConfiguration configuration)
         {
-            _config = config;
+            _configuration = configuration;
         }
 
-        public async Task SendEmailAsync(string to, string subject, string body)
+        public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(_config["EmailSettings:From"]));
-            email.To.Add(MailboxAddress.Parse(to));
-            email.Subject = subject;
-            email.Body = new TextPart(MimeKit.Text.TextFormat.Text) { Text = body };
+            var from = _configuration["EmailSettings:From"];
+            var username = _configuration["EmailSettings:Username"];
+            var password = _configuration["EmailSettings:Password"];
+            var smtpServer = _configuration["EmailSettings:SmtpServer"];
+            var port = int.Parse(_configuration["EmailSettings:Port"]);
 
-            using var smtp = new SmtpClient();
+            using (var client = new System.Net.Mail.SmtpClient(smtpServer, port))
+            {
+                client.Credentials = new NetworkCredential(username, password);
+                client.EnableSsl = true;
 
-            // Optional: for dev/testing if SSL fails
-            smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
-
-            await smtp.ConnectAsync(
-                _config["EmailSettings:SmtpServer"],
-                int.Parse(_config["EmailSettings:Port"]),
-                SecureSocketOptions.StartTls);
-
-            await smtp.AuthenticateAsync(
-                _config["EmailSettings:Username"],
-                _config["EmailSettings:Password"]);
-
-            await smtp.SendAsync(email);
-            await smtp.DisconnectAsync(true);
+                var mailMessage = new MailMessage(from, toEmail, subject, body);
+                await client.SendMailAsync(mailMessage);
+            }
         }
     }
+
 }
