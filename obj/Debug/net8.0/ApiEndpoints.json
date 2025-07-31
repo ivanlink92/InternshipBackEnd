@@ -467,6 +467,43 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "PeerMarking.Controllers.PresentationsController",
+    "Method": "CreatePresentation",
+    "RelativePath": "api/Presentations/presentations",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "presentation",
+        "Type": "PeerMarking.Models.Presentation",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PeerMarking.Controllers.PresentationsController",
+    "Method": "UploadStudents",
+    "RelativePath": "api/Presentations/presentations/{presentationId}/upload-students",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "presentationId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "csvFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "PeerMarking.Controllers.PresentationSlotsController",
     "Method": "GetPresentationSlots",
     "RelativePath": "api/PresentationSlots",

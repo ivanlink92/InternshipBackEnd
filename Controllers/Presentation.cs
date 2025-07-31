@@ -86,5 +86,82 @@ namespace PeerMarking.Controllers
         {
             return _context.Presentations.Any(e => e.Id == id);
         }
+
+        [HttpPost("presentations")]
+        public async Task<IActionResult> CreatePresentation([FromBody] Presentation presentation)
+        {
+            _context.Presentations.Add(presentation);
+            await _context.SaveChangesAsync();
+            return Ok(new { presentation.Id });
+        }
+
+        [HttpPost("presentations/{presentationId}/upload-students")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UploadStudents(int presentationId, IFormFile csvFile)
+        {
+            if (csvFile == null || csvFile.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            var presentation = await _context.Presentations.FindAsync(presentationId);
+            if (presentation == null)
+                return NotFound("Presentation not found.");
+
+            var students = new List<Student>();
+
+            using (var reader = new StreamReader(csvFile.OpenReadStream()))
+            {
+                await reader.ReadLineAsync();
+                string? line;
+                while ((line = await reader.ReadLineAsync()) != null)
+                {
+                    var values = line.Split(',');
+
+                    string studentId = values[0].Trim();
+                    string fullName = values[1].Trim();
+                    string email = values[2].Trim();
+
+                    var student = await _context.Students
+                        .FirstOrDefaultAsync(s => s.StudentId == studentId);
+
+                    if (student == null)
+                    {
+                        student = new Student
+                        {
+                            StudentId = studentId,
+                            FullName = fullName,
+                            Email = email
+                        };
+                        _context.Students.Add(student);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    students.Add(student);
+                }
+            }
+
+            var random = new Random();
+            var randomizedStudents = students.OrderBy(s => random.Next()).ToList();
+
+            DateTime slotTime = presentation.PresentationDate;
+            var slots = new List<PresentationSlot>();
+
+            foreach (var student in randomizedStudents)
+            {
+                slots.Add(new PresentationSlot
+                {
+                    PresentationId = presentation.Id,
+                    StudentId = student.Id,
+                    SlotDateTime = slotTime
+                });
+
+                slotTime = slotTime.AddMinutes(presentation.DurationMin);
+            }
+
+            _context.PresentationSlots.AddRange(slots);
+            await _context.SaveChangesAsync();
+
+            return Ok("Students uploaded and slots assigned.");
+        }
+
     }
 }
