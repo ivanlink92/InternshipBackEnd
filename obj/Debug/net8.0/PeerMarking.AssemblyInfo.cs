@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PeerMarking")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c238a4ce6223cab2150ec7cb2b87c43406c46147")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8b44e9cde065ec9b3f07815d0d176c1556978898")]
 [assembly: System.Reflection.AssemblyProductAttribute("PeerMarking")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PeerMarking")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

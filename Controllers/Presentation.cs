@@ -2,20 +2,24 @@
 using Microsoft.EntityFrameworkCore;
 using PeerMarking.Data;
 using PeerMarking.Models;
+using PeerMarking.Services;
 
 namespace PeerMarking.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class PresentationsController : ControllerBase
     {
         private readonly UniversityDbContext _context;
 
-        public PresentationsController(UniversityDbContext context)
+        private readonly EmailService _emailService;
+
+        public PresentationsController(UniversityDbContext context, EmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
-
         // GET: api/Presentations
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Presentation>>> GetPresentations()
@@ -110,18 +114,20 @@ namespace PeerMarking.Controllers
 
             using (var reader = new StreamReader(csvFile.OpenReadStream()))
             {
-                await reader.ReadLineAsync();
+                await reader.ReadLineAsync(); // skip header
                 string? line;
                 while ((line = await reader.ReadLineAsync()) != null)
                 {
                     var values = line.Split(',');
 
+                    if (values.Length < 3)
+                        continue; // skip malformed line
+
                     string studentId = values[0].Trim();
                     string fullName = values[1].Trim();
                     string email = values[2].Trim();
 
-                    var student = await _context.Students
-                        .FirstOrDefaultAsync(s => s.StudentId == studentId);
+                    var student = await _context.Students.FirstOrDefaultAsync(s => s.StudentId == studentId);
 
                     if (student == null)
                     {
@@ -139,6 +145,7 @@ namespace PeerMarking.Controllers
                 }
             }
 
+            // Shuffle students for slot assignment
             var random = new Random();
             var randomizedStudents = students.OrderBy(s => random.Next()).ToList();
 
@@ -160,8 +167,121 @@ namespace PeerMarking.Controllers
             _context.PresentationSlots.AddRange(slots);
             await _context.SaveChangesAsync();
 
-            return Ok("Students uploaded and slots assigned.");
+            // Reload slots with IDs
+            var savedSlots = await _context.PresentationSlots
+                .Where(s => s.PresentationId == presentation.Id)
+                .ToListAsync();
+
+            // Generate Markers
+            // Number of peer markers per presentation
+            int markersPerPresentation = 3;
+
+            var studentIds = students.Select(s => s.Id).ToList();
+            int n = studentIds.Count;
+
+            if (markersPerPresentation >= n)
+                return BadRequest("Markers per presentation must be less than total students.");
+
+            // Initialize marker workload count for each student
+            var markerLoad = studentIds.ToDictionary(id => id, id => 0);
+
+            // Prepare assignments dictionary: Key = presenterStudentId, Value = list of markerStudentIds
+            var assignments = studentIds.ToDictionary(id => id, id => new List<int>());
+
+            var rand = new Random();
+
+            // Assign peer markers randomly but balanced
+            foreach (var presenterId in studentIds)
+            {
+                // Candidates exclude presenter, shuffle them
+                var candidates = studentIds.Where(id => id != presenterId)
+                                           .OrderBy(_ => rand.Next())
+                                           .ToList();
+
+                foreach (var candidateId in candidates)
+                {
+                    if (assignments[presenterId].Count == markersPerPresentation)
+                        break;
+
+                    // Only assign if candidate hasn't exceeded marker limit
+                    if (markerLoad[candidateId] < markersPerPresentation)
+                    {
+                        assignments[presenterId].Add(candidateId);
+                        markerLoad[candidateId]++;
+                    }
+                }
+
+                if (assignments[presenterId].Count < markersPerPresentation)
+                    return BadRequest($"Cannot assign enough markers for student {presenterId} while balancing load.");
+            }
+
+            // Create Marker entities
+            var markers = new List<Marker>();
+
+            foreach (var slot in savedSlots)
+            {
+                int presenterId = slot.StudentId;
+
+                foreach (var markerStudentId in assignments[presenterId])
+                {
+                    markers.Add(new Marker
+                    {
+                        PresentationSlotId = slot.Id,
+                        MarkerStudentId = markerStudentId,
+                        TemporaryPassword = LecturersController.GenerateRandomPassword(20),
+                        StartTime = slot.SlotDateTime,
+                        EndTime = slot.SlotDateTime.AddMinutes(presentation.DurationMin),
+                        IsLecturer = false
+                    });
+                }
+
+                // Add lecturer marker
+                markers.Add(new Marker
+                {
+                    PresentationSlotId = slot.Id,
+                    MarkerStudentId = null, // or lecturer ID if exists
+                    TemporaryPassword = "LECTURER",
+                    StartTime = slot.SlotDateTime,
+                    EndTime = slot.SlotDateTime.AddMinutes(presentation.DurationMin),
+                    IsLecturer = true
+                });
+            }
+
+            _context.Markers.AddRange(markers);
+            await _context.SaveChangesAsync();
+
+            // Send email notifications
+            var peerMarkers = markers.Where(m => !m.IsLecturer).ToList();
+
+            foreach (var marker in peerMarkers)
+            {
+                var student = await _context.Students.FindAsync(marker.MarkerStudentId);
+                if (student != null && !string.IsNullOrWhiteSpace(student.Email) && student.Email.Contains("@"))
+                {
+                    string subject = "Peer Marking Assignment - Temporary Password";
+
+                    string body = $"Hello {student.FullName},\n\n" +
+                                  $"You have been assigned as a peer marker for an upcoming presentation.\n\n" +
+                                  $"Your temporary login password is: {marker.TemporaryPassword}\n\n" +
+                                  $"You can access the marking portal **only during this time window**:\n" +
+                                  $"Start Time: {marker.StartTime:yyyy-MM-dd HH:mm}\n" +
+                                  $"End Time: {marker.EndTime:yyyy-MM-dd HH:mm}\n\n" +
+                                  $"Please make sure to log in and complete your peer marking within this timeframe.\n\n" +
+                                  $"Portal Link: https://your-marking-portal-link.com\n\n" +
+                                  $"Regards,\nPeer Marking System";
+                    Console.WriteLine(student.Email);
+                    await _emailService.SendEmailAsync(student.Email, subject, body);
+                }
+                else
+                {
+                    Console.WriteLine($"Invalid Email for StudentId: {student?.StudentId}, Email: {student?.Email}");
+                }
+            }
+
+            return Ok("Students uploaded, slots assigned, and markers generated.");
+
         }
+
 
     }
 }

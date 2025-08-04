@@ -16,6 +16,9 @@ namespace PeerMarking.Data
 
         public DbSet<Presentation> Presentations { get; set; }
         public DbSet<PresentationSlot> PresentationSlots { get; set; }
+
+        public DbSet<Marker> Markers { get; set; }
+
     }
 
 }

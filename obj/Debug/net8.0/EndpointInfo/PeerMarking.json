@@ -611,6 +611,84 @@
         }
       }
     },
+    "/api/Markers": {
+      "get": {
+        "tags": [
+          "Markers"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Marker"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Marker"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Marker"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Markers/{id}": {
+      "get": {
+        "tags": [
+          "Markers"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Marker"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Marker"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Marker"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Presentations": {
       "get": {
         "tags": [
@@ -1395,6 +1473,47 @@
           "email": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Marker": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "presentationSlotId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "markerStudentId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "temporaryPassword": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isLecturer": {
+            "type": "boolean"
+          },
+          "presentationSlot": {
+            "$ref": "#/components/schemas/PresentationSlot"
+          },
+          "markerStudent": {
+            "$ref": "#/components/schemas/Student"
           }
         },
         "additionalProperties": false

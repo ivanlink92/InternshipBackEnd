@@ -57,7 +57,6 @@ namespace PeerMarking.Controllers
 
         // POST: api/Lecturers
         [HttpPost]
-        [HttpPost]
         public async Task<ActionResult<Lecturer>> PostLecturer(Lecturer lecturer)
         {
             // Generate a random password
