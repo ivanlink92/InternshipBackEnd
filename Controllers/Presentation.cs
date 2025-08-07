@@ -193,27 +193,21 @@ namespace PeerMarking.Controllers
             // Assign peer markers randomly but balanced
             foreach (var presenterId in studentIds)
             {
-                // Candidates exclude presenter, shuffle them
+                // Get eligible candidates (exclude self)
                 var candidates = studentIds.Where(id => id != presenterId)
-                                           .OrderBy(_ => rand.Next())
+                                           .OrderBy(id => markerLoad[id]) // Prioritize students with least load
+                                           .ThenBy(_ => rand.Next())      // Randomize among same load
                                            .ToList();
 
-                foreach (var candidateId in candidates)
+                assignments[presenterId] = candidates.Take(markersPerPresentation).ToList();
+
+                // Update workload count
+                foreach (var markerId in assignments[presenterId])
                 {
-                    if (assignments[presenterId].Count == markersPerPresentation)
-                        break;
-
-                    // Only assign if candidate hasn't exceeded marker limit
-                    if (markerLoad[candidateId] < markersPerPresentation)
-                    {
-                        assignments[presenterId].Add(candidateId);
-                        markerLoad[candidateId]++;
-                    }
+                    markerLoad[markerId]++;
                 }
-
-                if (assignments[presenterId].Count < markersPerPresentation)
-                    return BadRequest($"Cannot assign enough markers for student {presenterId} while balancing load.");
             }
+
 
             // Create Marker entities
             var markers = new List<Marker>();
